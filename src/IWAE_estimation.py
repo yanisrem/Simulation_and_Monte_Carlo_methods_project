@@ -1,6 +1,7 @@
 from densite_function import *
 from gaussian_simulation import *
 import numpy as np
+from vraisemblance import *
 
 def importance_sampling_logvraisemblance(k, theta, A, b, x):
     array_w=np.array([])
@@ -29,3 +30,10 @@ def importance_sampling_gradientlogvraisemblance(k, theta, A, b, x):
         array_wj=np.append(array_wj)
         i+=1
     return(np.mean(array_wi)/np.mean(array_wj))
+
+
+def biais_IWAE_logvraisemblance():
+    pass
+
+def biais_IWAE_gradientlogvraisemblance():
+    pass
