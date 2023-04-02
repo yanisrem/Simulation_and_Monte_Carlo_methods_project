@@ -1,5 +1,5 @@
 import numpy as np
-from densite_function import *
+from src.densite_function import *
 
 def log_vraisemblance(x, theta):
     return np.log(densite_X(x, theta))
