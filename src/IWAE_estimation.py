@@ -26,10 +26,3 @@ def importance_sampling_gradientlogvraisemblance(k, theta, A, b, x):
         array_wi= np.append(array_wi, W_i)
         i+=1
     return x-theta
-
-
-def biais_IWAE_logvraisemblance():
-    pass
-
-def biais_IWAE_gradientlogvraisemblance():
-    pass
