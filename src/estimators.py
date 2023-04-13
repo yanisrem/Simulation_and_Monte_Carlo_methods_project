@@ -184,7 +184,7 @@ def importance_sampling_gradientlogvraisemblance(k, theta, A, b, x, return_z_the
 #### SUMO
 
 def estimateur_SUMO_gradientlogvraisemblance(x, theta, A, b, r, l=0):
-    K=np.random.geometric(p=0.6, size=1)[0]
+    K=np.random.geometric(p=r, size=1)[0]
     k=0
     array_delta_k=np.array([])
     array_proba_K_sup_k=np.array([])
@@ -248,9 +248,9 @@ def estimateur_ML_SS_gradientlogvraisemblance(x, theta, A, b, r, l=0):
 
     I_0=importance_sampling_gradientlogvraisemblance(k=2**l, theta=theta, A=A, b=b, x=x)
 
-    IWAE_O=np.sum(np.array([w_i*z_i for (w_i,z_i) in zip(array_w_O,z_O)]), axis=0)/np.sum(array_w_O)-theta
-    IWAE_E=np.sum(np.array([w_i*z_i for (w_i,z_i) in zip(array_w_E,z_E)]), axis=0)/np.sum(array_w_E)-theta
-    IWAE_OUE=np.sum(np.array([w_i*z_i for (w_i,z_i) in zip(array_w,z)]), axis=0)/np.sum(array_w)-theta
+    IWAE_O=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w_O,z_O)]), axis=0)/np.sum(array_w_O)
+    IWAE_E=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w_E,z_E)]), axis=0)/np.sum(array_w_E)
+    IWAE_OUE=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w,z)]), axis=0)/np.sum(array_w)
 
     delta_K=IWAE_OUE-0.5*(IWAE_O+IWAE_E)
 
@@ -303,9 +303,9 @@ def estimateur_ML_RR_gradientlogvraisemblance(x, theta, A, b, r, l=0):
 
         I_0=np.mean(z_theta, axis=0)
 
-        IWAE_O=np.sum(np.array([w_i*z_i for (w_i,z_i) in zip(array_w_O,z_O_theta)]), axis=0)/np.sum(array_w_O)
-        IWAE_E=np.sum(np.array([w_i*z_i for (w_i,z_i) in zip(array_w_E,z_E_theta)]), axis=0)/np.sum(array_w_E)
-        IWAE_OUE=np.sum(np.array([w_i*z_i for (w_i,z_i) in zip(array_w,z_theta)]), axis=0)/np.sum(array_w)
+        IWAE_O=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w_O,z_O_theta)]), axis=0)/np.sum(array_w_O)
+        IWAE_E=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w_E,z_E_theta)]), axis=0)/np.sum(array_w_E)
+        IWAE_OUE=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w,z_theta)]), axis=0)/np.sum(array_w)
 
         delta_k=IWAE_OUE-0.5*(IWAE_O+IWAE_E)
 
