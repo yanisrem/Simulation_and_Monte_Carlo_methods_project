@@ -268,8 +268,8 @@ def estimateur_ML_RR_gradientlogvraisemblance(x, theta, A, b, r, l=0):
 
     while k<K:
 
-        z_O_theta=np.array([])
-        z_E_theta=np.array([])
+        z_O=np.array([])
+        z_E=np.array([])
 
         array_w=np.array([])
         array_w_O=np.array([])
@@ -285,27 +285,24 @@ def estimateur_ML_RR_gradientlogvraisemblance(x, theta, A, b, r, l=0):
             w_i_O=w(z=z_i_O, x=x, theta=theta, A=A,b=b)
 
             if i==0:
-                z_O_theta=np.append(z_O_theta, z_i_O-theta)
-                z_E_theta=np.append(z_E_theta, z_i_E-theta)
+                z_O=np.append(z_O, z_i_O)
+                z_E=np.append(z_E, z_i_E)
 
             else:
-                z_O_theta= np.vstack((z_O_theta, z_i_O-theta))
-                z_E_theta= np.vstack((z_E_theta, z_i_E-theta))
+                z_O= np.vstack((z_O, z_i_O))
+                z_E= np.vstack((z_E, z_i_E))
 
             array_w_O=np.append(array_w_O, w_i_O)
             array_w_E=np.append(array_w_E, w_i_E)
             i+=1
 
 
-        z_theta=np.unique(np.vstack((z_O_theta,z_E_theta)), axis=0)
-
+        array_z=np.unique(np.vstack((z_O,z_E)), axis=0)
         array_w=np.union1d(array_w_O, array_w_E)
 
-        I_0=np.mean(z_theta, axis=0)
-
-        IWAE_O=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w_O,z_O_theta)]), axis=0)/np.sum(array_w_O)
-        IWAE_E=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w_E,z_E_theta)]), axis=0)/np.sum(array_w_E)
-        IWAE_OUE=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w,z_theta)]), axis=0)/np.sum(array_w)
+        IWAE_O=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w_O,z_O)]), axis=0)/np.sum(array_w_O)
+        IWAE_E=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w_E,z_E)]), axis=0)/np.sum(array_w_E)
+        IWAE_OUE=np.sum(np.array([w_i*(z_i-theta) for (w_i,z_i) in zip(array_w,array_z)]), axis=0)/np.sum(array_w)
 
         delta_k=IWAE_OUE-0.5*(IWAE_O+IWAE_E)
 
