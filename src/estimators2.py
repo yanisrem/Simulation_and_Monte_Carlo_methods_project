@@ -62,7 +62,6 @@ def estimateur_SUMO_logvraisemblance(x, theta, A, b, r, k_max=1):
 
 def estimateur_ML_SS_logvraisemblance(x, theta, A, b, r, k_max=1):
     K=np.random.geometric(p=r, size=1)[0]
-    
     while K>k_max:
         K=np.random.geometric(p=r, size=1)[0]
 
