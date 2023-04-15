@@ -14,7 +14,7 @@ def importance_sampling_logvraisemblance(k, theta, A, b, x, return_weights=False
     array_w=np.array([])
     i=0
     while i<k:
-        z_i=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))[0]
+        z_i=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
         W_i=w(z=z_i, x=x, theta=theta, A=A,b=b)
         array_w= np.append (array_w, W_i)
         i+=1
@@ -74,8 +74,8 @@ def estimateur_ML_SS_logvraisemblance(x, theta, A, b, r, k_max=1):
 
     i=1
     while i<=2**K:
-        z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))[0]
-        z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))[0]
+        z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
+        z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
 
         w_i_E=w(z=z_i_E, x=x, theta=theta, A=A,b=b)
         w_i_O=w(z=z_i_O, x=x, theta=theta, A=A,b=b)
@@ -126,8 +126,8 @@ def estimateur_ML_RR_logvraisemblance(x, theta, A, b, r, k_max=1):
         i=0
         while i<2**k:
 
-            z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))[0]
-            z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))[0]
+            z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
+            z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
 
             w_i_E=w(z=z_i_E, x=x, theta=theta, A=A,b=b)
             w_i_O=w(z=z_i_O, x=x, theta=theta, A=A,b=b)
@@ -181,7 +181,7 @@ def importance_sampling_gradientlogvraisemblance(k, theta, A, b, x, return_array
 
     i=0
     while i<k:
-        z_i=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))[0]
+        z_i=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
         W_i=w(z=z_i, x=x, theta=theta, A=A,b=b)
         array_w= np.append(array_w, W_i)
 
@@ -248,8 +248,8 @@ def estimateur_ML_SS_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
 
     i=0
     while i<2**K:
-        z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))[0]
-        z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))[0]
+        z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
+        z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
 
         w_i_E=w(z=z_i_E, x=x, theta=theta, A=A,b=b)
         w_i_O=w(z=z_i_O, x=x, theta=theta, A=A,b=b)
@@ -268,7 +268,6 @@ def estimateur_ML_SS_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
 
     array_z=np.unique(np.vstack((z_O,z_E)), axis=0)
     array_w=np.union1d(array_w_O, array_w_E)
-
 
     I_0=np.mean(array_z)-theta
 
@@ -305,8 +304,8 @@ def estimateur_ML_RR_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
         i=0
         while i<2**k:
 
-            z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))[0]
-            z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))[0]
+            z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
+            z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
 
             w_i_E=w(z=z_i_E, x=x, theta=theta, A=A,b=b)
             w_i_O=w(z=z_i_O, x=x, theta=theta, A=A,b=b)

@@ -22,7 +22,7 @@ def densite_XZ(x,z,theta):
 
 
 def densite_q(A, b, z, x):
-    return multivariate_normal.pdf(z, mean=np.array(np.matmul(A,x)+b)[0], cov=(2/3)*np.identity(20))
+    return multivariate_normal.pdf(z, mean=np.matmul(A,x)+b, cov=(2/3)*np.identity(20))
 
 def w(z, x, theta, A,b):
     return densite_XZ(x,z,theta)/densite_q(A, b, z, x)
