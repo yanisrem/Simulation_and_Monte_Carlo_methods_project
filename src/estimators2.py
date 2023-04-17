@@ -25,39 +25,54 @@ def importance_sampling_logvraisemblance(k, theta, A, b, x, return_weights=False
 
 #### SUMO
 
-def estimateur_SUMO_logvraisemblance(x, theta, A, b, r, k_max=1):
+def estimateur_SUMO_logvraisemblance(x, theta, A, b, r, k_max=None, l=0):
     K=np.random.geometric(p=r, size=1)[0]
     
-    while K>k_max:
-        K=np.random.geometric(p=r, size=1)[0]
+    if k_max!=None:
+        while K>k_max:
+            K=np.random.geometric(p=r, size=1)[0]
 
     array_delta_k_proba_k=np.array([])
 
     for k in range(K+1): #k=0,..,K
+
+        l_k2, array_w2=importance_sampling_logvraisemblance(k=k+l+2, theta=theta, A=A, b=b, x=x, return_weights=True) #k+l+2
+        l_k1=importance_sampling_log_vraisemblance_from_array_w(array_w2[:len(array_w2)-1]) #k+l+1
+
         if k==0:
-            l_k1, array_w1=importance_sampling_logvraisemblance(k=k+1, theta=theta, A=A, b=b, x=x, return_weights=True)
-        else:
-            l_k1=importance_sampling_logvraisemblance(k=k+1, theta=theta, A=A, b=b, x=x, return_weights=False)
+            if l==0: #k+l+1=1
+                I_0=l_k1
+            else:
+                I_0=importance_sampling_log_vraisemblance_from_array_w(array_w2[:len(array_w2)-2]) #k+l+2-2=l
+        
+        # if k==0:
+        #     l_k1, array_w1=importance_sampling_logvraisemblance(k=k+l+1, theta=theta, A=A, b=b, x=x, return_weights=True)
+        # else:
+        #     l_k1=importance_sampling_logvraisemblance(k=k+l+1, theta=theta, A=A, b=b, x=x, return_weights=False)
         
         proba_k=geom.sf(k=k, p=r)+geom.pmf(k=k, p=r)
 
-        l_k2=importance_sampling_logvraisemblance(k=k+2, theta=theta, A=A, b=b, x=x, return_weights=False)
+        #l_k2=importance_sampling_logvraisemblance(k=k+l+2, theta=theta, A=A, b=b, x=x, return_weights=False)
 
         delta_k=l_k2-l_k1
         array_delta_k_proba_k=np.append(array_delta_k_proba_k, delta_k/proba_k)
 
-    
-    I_0=np.log(array_w1[0])
+    # if l==0:
+    #     I_0=np.log(array_w1[0])
+    # else:
+    #     I_0=importance_sampling_logvraisemblance(k=l, theta=theta, A=A, b=b, x=x)
     SUMO=I_0+np.sum(array_delta_k_proba_k)
 
     return SUMO
 
 #### ML-SS
 
-def estimateur_ML_SS_logvraisemblance(x, theta, A, b, r, k_max=1):
+def estimateur_ML_SS_logvraisemblance(x, theta, A, b, r, k_max=None, l=0):
     K=np.random.geometric(p=r, size=1)[0]
-    while K>k_max:
-        K=np.random.geometric(p=r, size=1)[0]
+
+    if k_max!=None:
+        while K>k_max:
+            K=np.random.geometric(p=r, size=1)[0]
 
     z_O=np.array([])
     z_E=np.array([])
@@ -66,7 +81,7 @@ def estimateur_ML_SS_logvraisemblance(x, theta, A, b, r, k_max=1):
     array_w_O=np.array([])
     array_w_E=np.array([])
 
-    for i in range(1,2**(K+1)+1): #i=1,...,2^(K+1)
+    for i in range(1,2**(K+l+1)+1): #i=1,...,2^(K+1)
         #z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
         #z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
 
@@ -84,15 +99,17 @@ def estimateur_ML_SS_logvraisemblance(x, theta, A, b, r, k_max=1):
         array_w=np.append(array_w, w_i)
 
     array_w=np.unique(array_w)
-    
-    I_0=np.mean(np.log(array_w))
+
+    if l==0:
+        I_0=np.mean(np.log(array_w))
+    else:
+        I_0=importance_sampling_log_vraisemblance_from_array_w(array_w[:2**l])
 
     IWAE_O=importance_sampling_log_vraisemblance_from_array_w(array_w_O)
     IWAE_E=importance_sampling_log_vraisemblance_from_array_w(array_w_E)
     IWAE_OUE=importance_sampling_log_vraisemblance_from_array_w(array_w)
 
     delta_K=IWAE_OUE-0.5*(IWAE_O+IWAE_E)
-
     SS=I_0+delta_K/geom.pmf(K, p=r)
 
     return SS
@@ -100,10 +117,11 @@ def estimateur_ML_SS_logvraisemblance(x, theta, A, b, r, k_max=1):
 
 #### ML-RR
 
-def estimateur_ML_RR_logvraisemblance(x, theta, A, b, r, k_max=1):
+def estimateur_ML_RR_logvraisemblance(x, theta, A, b, r, k_max=None, l=0):
     K=np.random.geometric(p=r, size=1)[0]
-    while K>k_max:
-        K=np.random.geometric(p=r, size=1)[0]
+    if k_max!=None:
+        while K>k_max:
+            K=np.random.geometric(p=r, size=1)[0]
 
     array_delta_proba=np.array([])
 
@@ -117,7 +135,7 @@ def estimateur_ML_RR_logvraisemblance(x, theta, A, b, r, k_max=1):
         array_w_E=np.array([])
 
 
-        for i in range(1,2**(k+1)+1): #i=1,...,2^(k+1)
+        for i in range(1,2**(k+l+1)+1): #i=1,...,2^(k+1)
 
             z_i=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
             w_i=w(z=z_i, x=x, theta=theta, A=A,b=b)
@@ -140,12 +158,15 @@ def estimateur_ML_RR_logvraisemblance(x, theta, A, b, r, k_max=1):
         delta_k=IWAE_OUE-0.5*(IWAE_O+IWAE_E)
 
         if k==0:
-            I_0=np.mean(np.log(array_w))
+            if l==0:
+                I_0=np.mean(np.log(array_w))
+            else:
+                I_0=importance_sampling_log_vraisemblance_from_array_w(array_w[:2**l])
 
         proba_k=geom.sf(k=k, p=r)+geom.pmf(k=k, p=r)
-
-
         array_delta_proba=np.append(array_delta_proba, delta_k/proba_k)
+    
+
     RR=I_0+np.sum(array_delta_proba)
 
     return RR
@@ -183,43 +204,54 @@ def importance_sampling_gradientlogvraisemblance(k, theta, A, b, x, return_array
 
 #### SUMO
 
-def estimateur_SUMO_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
+def estimateur_SUMO_gradientlogvraisemblance(x, theta, A, b, r, k_max=None, l=0):
     K=np.random.geometric(p=r, size=1)[0]
     
-    while K>k_max:
-        K=np.random.geometric(p=r, size=1)[0]
+    if k_max!=None:
+        while K>k_max:
+            K=np.random.geometric(p=r, size=1)[0]
 
     array_delta_k_proba_k=np.array([])
 
     for k in range(K+1): #k=0,...,K
         if k==0:
-            gradient_k2=importance_sampling_gradientlogvraisemblance(k=k+2, theta=theta, A=A, b=b, x=x, return_array_w_z=False)
-            array_w1, array_z1, gradient_k1=importance_sampling_gradientlogvraisemblance(k=k+1, theta=theta, A=A, b=b, x=x, return_array_w_z=True)
+            array_w2, array_z2, gradient_k2=importance_sampling_gradientlogvraisemblance(k=k+l+2, theta=theta, A=A, b=b, x=x, return_array_w_z=True) #k+l+2
+            gradient_k1=importance_sampling_gradientlog_vraisemblance_from_array_wz(array_w2[:len(array_w2-1)], array_z2[:len(array_z2)-1], theta)
+            #array_w1, array_z1, gradient_k1=importance_sampling_gradientlogvraisemblance(k=k+l+1, theta=theta, A=A, b=b, x=x, return_array_w_z=True)
             delta_k=gradient_k2-gradient_k1
             proba_k=geom.sf(k=k, p=r)+geom.pmf(k=k, p=r)
-
             array_delta_k_proba_k=np.append(array_delta_k_proba_k, delta_k/proba_k)
+
+            if l==0: #k+l+1=1
+                I_0=gradient_k1
+            else:
+                I_0=importance_sampling_gradientlog_vraisemblance_from_array_wz(array_w2[:len(array_w2-2)], array_z2[:len(array_z2)-2], theta) #k+l+2-2=l
         else:
-            gradient_k2=importance_sampling_gradientlogvraisemblance(k=k+2, theta=theta, A=A, b=b, x=x, return_array_w_z=False)
-            gradient_k1=importance_sampling_gradientlogvraisemblance(k=k+1, theta=theta, A=A, b=b, x=x, return_array_w_z=False)
-            
+            #gradient_k2=importance_sampling_gradientlogvraisemblance(k=k+l+2, theta=theta, A=A, b=b, x=x, return_array_w_z=False)
+            #gradient_k1=importance_sampling_gradientlogvraisemblance(k=k+l+1, theta=theta, A=A, b=b, x=x, return_array_w_z=False)
+            array_w2, array_z2, gradient_k2=importance_sampling_gradientlogvraisemblance(k=k+l+2, theta=theta, A=A, b=b, x=x, return_array_w_z=True) #k+l+2
+            gradient_k1=importance_sampling_gradientlog_vraisemblance_from_array_wz(array_w2[:len(array_w2-1)], array_z2[:len(array_z2)-1], theta)
             delta_k=gradient_k2-gradient_k1
             proba_k=geom.sf(k=k, p=r)+geom.pmf(k=k, p=r)
             array_delta_k_proba_k=np.vstack((array_delta_k_proba_k, delta_k/proba_k))
 
-    I_0=array_z1-theta
+    # if l==0:
+    #     I_0=array_z1-theta
+    # else:
+    #     I_0=importance_sampling_gradientlogvraisemblance(l, theta, A, b, x, return_array_w_z=False)
+    
     SUMO=I_0+np.sum(array_delta_k_proba_k, axis=0)
-
 
     return SUMO
 
 #### ML-SS
 
-def estimateur_ML_SS_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
+def estimateur_ML_SS_gradientlogvraisemblance(x, theta, A, b, r, k_max=None, l=0):
     K=np.random.geometric(p=r, size=1)[0]
 
-    while K>k_max:
-        K=np.random.geometric(p=r, size=1)[0]
+    if k_max!=None:
+        while K>k_max:
+            K=np.random.geometric(p=r, size=1)[0]
 
     z_O=np.array([])
     z_E=np.array([])
@@ -228,7 +260,7 @@ def estimateur_ML_SS_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
     array_w_O=np.array([])
     array_w_E=np.array([])
 
-    for i in range(1,2**K+1): #i=1,...,2^K
+    for i in range(1,2**(K+l)+1): #i=1,...,2^K
         z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
         z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
 
@@ -249,9 +281,10 @@ def estimateur_ML_SS_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
     array_z=np.unique(np.vstack((z_O,z_E)), axis=0)
     array_w=np.union1d(array_w_O, array_w_E)
 
-
-
-    I_0=np.mean(array_z)-theta
+    if l==0:
+        I_0=np.mean(array_z)-theta
+    else:
+        I_0=importance_sampling_gradientlog_vraisemblance_from_array_wz(array_w[:2**l], array_z[:2**l], theta)
 
     IWAE_O=importance_sampling_gradientlog_vraisemblance_from_array_wz(array_w_O, z_O, theta)
     IWAE_E=importance_sampling_gradientlog_vraisemblance_from_array_wz(array_w_E, z_E, theta)
@@ -265,13 +298,14 @@ def estimateur_ML_SS_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
 
 #### ML-RR
     
-def estimateur_ML_RR_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
+def estimateur_ML_RR_gradientlogvraisemblance(x, theta, A, b, r, k_max=None,l=0):
     K=np.random.geometric(p=r, size=1)[0]
     
-    while K>k_max:
-        K=np.random.geometric(p=r, size=1)[0]
-    array_delta_k=np.array([])
-    array_proba_K_sup_k=np.array([])
+    if k_max!=None:
+        while K>k_max:
+            K=np.random.geometric(p=r, size=1)[0]
+
+    array_delta_k_proba_K=np.array([])
 
     for k in range(K+1): #k=0,...,K
 
@@ -282,7 +316,7 @@ def estimateur_ML_RR_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
         array_w_O=np.array([])
         array_w_E=np.array([])
 
-        for i in range(1,2**k+1): #i=1,...,2^k
+        for i in range(1,2**(k+l)+1): #i=1,...,2^k
 
             z_i_O=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
             z_i_E=simulate_gaussian_vector(mu=np.matmul(A,x)+b, sigma=(2/3)*np.identity(20))
@@ -300,7 +334,6 @@ def estimateur_ML_RR_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
 
             array_w_O=np.append(array_w_O, w_i_O)
             array_w_E=np.append(array_w_E, w_i_E)
-            i+=1
 
         array_z=np.unique(np.vstack((z_O,z_E)), axis=0)
         array_w=np.union1d(array_w_O, array_w_E)
@@ -310,17 +343,20 @@ def estimateur_ML_RR_gradientlogvraisemblance(x, theta, A, b, r, k_max=1):
         IWAE_OUE=importance_sampling_gradientlog_vraisemblance_from_array_wz(array_w, array_z, theta)
 
         delta_k=IWAE_OUE-0.5*(IWAE_O+IWAE_E)
+        proba_k=geom.sf(k=k, p=r)+geom.pmf(k=k, p=r)
 
         if k==0:
-            array_delta_k=np.append(array_delta_k, delta_k)
-            I_0=np.mean(array_z)-theta
-        else:
-            array_delta_k=np.vstack((array_delta_k, delta_k))
-        
-        proba_k=geom.sf(k=k, p=r)+geom.pmf(k=k, p=r)
-        array_proba_K_sup_k=np.append(array_proba_K_sup_k, proba_k)
+            array_delta_k_proba_K=np.append(array_delta_k_proba_K, delta_k/proba_k)
 
+            if l==0:
+                I_0=np.mean(array_z)-theta
+            else:
+                I_0=importance_sampling_gradientlog_vraisemblance_from_array_wz(array_w[:2**l], array_z[:2**l], theta)
+
+
+        else:
+            array_delta_k_proba_K=np.vstack((array_delta_k_proba_K, delta_k/proba_k))
     
-    RR=I_0+np.sum(np.array([array_delta_k[i]/array_proba_K_sup_k[i] for i in range(len(array_proba_K_sup_k))]), axis=0)
+    RR=I_0+np.sum(array_delta_k_proba_K, axis=0)
 
     return RR
