@@ -74,9 +74,6 @@ def estimateur_ML_SS_logvraisemblance(x, theta, A, b, r, k_max=None, l=0):
         while K>k_max:
             K=np.random.geometric(p=r, size=1)[0]
 
-    z_O=np.array([])
-    z_E=np.array([])
-
     array_w=np.array([])
     array_w_O=np.array([])
     array_w_E=np.array([])
@@ -127,9 +124,6 @@ def estimateur_ML_RR_logvraisemblance(x, theta, A, b, r, k_max=None, l=0):
 
     for k in range(K+1): #k=0,...,K
 
-        z_O=np.array([])
-        z_E=np.array([])
-
         array_w=np.array([])
         array_w_O=np.array([])
         array_w_E=np.array([])
@@ -141,10 +135,8 @@ def estimateur_ML_RR_logvraisemblance(x, theta, A, b, r, k_max=None, l=0):
             w_i=w(z=z_i, x=x, theta=theta, A=A,b=b)
 
             if i%2==0:
-                z_O= np.append(z_O, z_i)
                 array_w_O=np.append(array_w_O, w_i)
             else:    
-                z_E= np.append(z_E, z_i)
                 array_w_E=np.append(array_w_E, w_i)
 
             array_w=np.append(array_w, w_i)
