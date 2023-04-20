@@ -1,10 +1,22 @@
-from src.estimators2 import *
+from src.estimators import *
 from src.vraisemblance import *
 import numpy as np
 
 ### SGD usuelle
 
 def SGD(theta_init, learn_rate, echantillon, n_iter):
+    """Descente de gradient stochastique pour estimation de theta
+
+    Args:
+        theta_init (np.array): paramètre theta initial
+        learn_rate (float): learning rate
+        echantillon (np.array): n-échantillon utilisé pour estimer theta
+        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, on l'échantillon est re-mélangé
+        puis, on recommence à la première itération
+
+    Returns:
+        np.array: estimateur de theta
+    """
     #Step 1: mélanger l'échantillon
     i=0
     compteur=0
@@ -35,6 +47,21 @@ def SGD(theta_init, learn_rate, echantillon, n_iter):
 ### SGD IAWE
 
 def SGD_IAWE(theta_init, learn_rate, n_iter, A, b, echantillon, k=6):
+    """Descente de gradient stochastique avec estimateur IWAE du gradient pour estimation de theta
+
+    Args:
+        theta_init (np.array): paramètre theta initial
+        learn_rate (float): learning rate
+        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, on l'échantillon est re-mélangé
+        puis, on recommence à la première itération
+        A (np.array): matrice de dimensions 20*20
+        b (np.array): vecteur dans R^20
+        echantillon (np.array): n-échantillon utilisé pour estimer theta
+        k (int, optional): paramètre de complexité. 6 par défaut.
+
+    Returns:
+        np.array: estimateur de theta
+    """
     #Step 1: mélanger l'échantillon
     i=0
     compteur=0
@@ -74,6 +101,22 @@ def SGD_IAWE(theta_init, learn_rate, n_iter, A, b, echantillon, k=6):
 ### SGD SUMO
 
 def SGD_SUMO(theta_init, learn_rate, n_iter, A, b, echantillon, l=0):
+    """Descente de gradient stochastique avec estimateur SUMO du gradient pour estimation de theta
+
+    Args:
+        theta_init (np.array): paramètre theta initial
+        learn_rate (float): learning rate
+        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, on l'échantillon est re-mélangé
+        puis, on recommence à la première itération
+        A (np.array): matrice de dimensions 20*20
+        b (np.array): vecteur dans R^20
+        echantillon (np.array): n-échantillon utilisé pour estimer theta
+        l (int, optional): paramètre de complexité. 0 par défaut.
+
+    Returns:
+        np.array: estimateur de theta
+    """
+
     #Step 1: mélanger l'échantillon
     i=0
     compteur=0
@@ -114,6 +157,21 @@ def SGD_SUMO(theta_init, learn_rate, n_iter, A, b, echantillon, l=0):
 ### SGD RR
 
 def SGD_RR(theta_init, learn_rate, n_iter, A, b, echantillon, l=6):
+    """Descente de gradient stochastique avec estimateur ML-RR du gradient pour estimation de theta
+
+    Args:
+        theta_init (np.array): paramètre theta initial
+        learn_rate (float): learning rate
+        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, on l'échantillon est re-mélangé
+        puis, on recommence à la première itération
+        A (np.array): matrice de dimensions 20*20
+        b (np.array): vecteur dans R^20
+        echantillon (np.array): n-échantillon utilisé pour estimer theta
+        l (int, optional): paramètre de complexité. 6 par défaut.
+
+    Returns:
+        np.array: estimateur de theta
+    """
     #Step 1: mélanger l'échantillon
     i=0
     compteur=0
@@ -153,6 +211,21 @@ def SGD_RR(theta_init, learn_rate, n_iter, A, b, echantillon, l=6):
 ### SGD SS
 
 def SGD_SS(theta_init, learn_rate, n_iter, A, b, echantillon, l=6):
+    """Descente de gradient stochastique avec estimateur ML-SS du gradient pour estimation de theta
+
+    Args:
+        theta_init (np.array): paramètre theta initial
+        learn_rate (float): learning rate
+        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, on l'échantillon est re-mélangé
+        puis, on recommence à la première itération
+        A (np.array): matrice de dimensions 20*20
+        b (np.array): vecteur dans R^20
+        echantillon (np.array): n-échantillon utilisé pour estimer theta
+        l (int, optional): paramètre de complexité. 6 par défaut.
+
+    Returns:
+        np.array: estimateur de theta
+    """
     #Step 1: mélanger l'échantillon
     i=0
     compteur=0
