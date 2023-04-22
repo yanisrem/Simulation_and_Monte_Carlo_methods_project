@@ -69,7 +69,7 @@ def SGD_IAWE(theta_init, learn_rate, n_iter, A, b, echantillon, k=6):
     estimateur_gradient=importance_sampling_gradientlogvraisemblance(k=k, theta=theta_init, A=A, b=b, x=echantillon[i])
     if True in np.isnan(estimateur_gradient):
         estimateur_gradient=0
-    theta=theta_init-learn_rate*estimateur_gradient
+    theta=theta_init-learn_rate*(-1)*estimateur_gradient
 
     i+=1
     compteur+=1
@@ -84,14 +84,14 @@ def SGD_IAWE(theta_init, learn_rate, n_iter, A, b, echantillon, k=6):
             estimateur_gradient=importance_sampling_gradientlogvraisemblance(k=k, theta=theta, A=A, b=b, x=echantillon[i])
             if True in np.isnan(estimateur_gradient):
                estimateur_gradient=0
-            theta=theta-learn_rate*estimateur_gradient
+            theta=theta-learn_rate*(-1)*estimateur_gradient
             i+=1
             compteur+=1
         else:
             estimateur_gradient=importance_sampling_gradientlogvraisemblance(k=k, theta=theta, A=A, b=b, x=echantillon[i])
             if True in np.isnan(estimateur_gradient):
                 estimateur_gradient=0
-            theta=theta-learn_rate*estimateur_gradient
+            theta=theta-learn_rate*(-1)*estimateur_gradient
             i+=1
             compteur+=1
 
@@ -124,7 +124,7 @@ def SGD_SUMO(theta_init, learn_rate, n_iter, A, b, echantillon, l=0):
     estimateur_gradient=estimateur_SUMO_gradientlogvraisemblance(theta=theta_init, A=A, b=b, x=echantillon[i], r=0.6, l=0)
     if True in np.isnan(estimateur_gradient):
         estimateur_gradient=0
-    theta=theta_init-learn_rate*estimateur_gradient
+    theta=theta_init-learn_rate*(-1)*estimateur_gradient
 
     i+=1
     compteur+=1
@@ -139,7 +139,7 @@ def SGD_SUMO(theta_init, learn_rate, n_iter, A, b, echantillon, l=0):
             estimateur_gradient=estimateur_SUMO_gradientlogvraisemblance(theta=theta, A=A, b=b, x=echantillon[i], r=0.6, l=l)
             if True in np.isnan(estimateur_gradient):
                 estimateur_gradient=0
-            theta=theta-learn_rate*estimateur_gradient
+            theta=theta-learn_rate*(-1)*estimateur_gradient
             i+=1
             compteur+=1
             
@@ -147,7 +147,7 @@ def SGD_SUMO(theta_init, learn_rate, n_iter, A, b, echantillon, l=0):
             estimateur_gradient=estimateur_SUMO_gradientlogvraisemblance(theta=theta, A=A, b=b, x=echantillon[i], r=0.6, l=l)
             if True in np.isnan(estimateur_gradient):
                 estimateur_gradient=0
-            theta=theta-learn_rate*estimateur_gradient
+            theta=theta-learn_rate*(-1)*estimateur_gradient
             i+=1
             compteur+=1
 
@@ -179,7 +179,7 @@ def SGD_RR(theta_init, learn_rate, n_iter, A, b, echantillon, l=6):
     estimateur_gradient=estimateur_ML_RR_gradientlogvraisemblance(x=echantillon[i], theta=theta_init, A=A, b=b, r=0.6, l=l)
     if True in np.isnan(estimateur_gradient):
         estimateur_gradient=0
-    theta=theta_init-learn_rate*estimateur_gradient
+    theta=theta_init-learn_rate*(-1)*estimateur_gradient
 
     i+=1
     compteur+=1
@@ -194,14 +194,14 @@ def SGD_RR(theta_init, learn_rate, n_iter, A, b, echantillon, l=6):
             estimateur_gradient=estimateur_ML_RR_gradientlogvraisemblance(x=echantillon[i], theta=theta, A=A, b=b, r=0.6, l=l)
             if True in np.isnan(estimateur_gradient):
                 estimateur_gradient=0
-            theta=theta-learn_rate*estimateur_gradient
+            theta=theta-learn_rate*(-1)*estimateur_gradient
             i+=1
             compteur+=1
         else:
             estimateur_gradient=estimateur_ML_RR_gradientlogvraisemblance(x=echantillon[i], theta=theta, A=A, b=b, r=0.6, l=l)
             if True in np.isnan(estimateur_gradient):
                 estimateur_gradient=0
-            theta=theta-learn_rate*estimateur_gradient
+            theta=theta-learn_rate*(-1)*estimateur_gradient
             i+=1
             compteur+=1
 
@@ -233,7 +233,7 @@ def SGD_SS(theta_init, learn_rate, n_iter, A, b, echantillon, l=6):
     estimateur_gradient=estimateur_ML_SS_gradientlogvraisemblance(x=echantillon[i], theta=theta_init, A=A, b=b, r=0.6, l=l)
     if True in np.isnan(estimateur_gradient):
         estimateur_gradient=0
-    theta=theta_init-learn_rate*estimateur_gradient
+    theta=theta_init-learn_rate*(-1)*estimateur_gradient
 
     i+=1
     compteur+=1
@@ -248,14 +248,14 @@ def SGD_SS(theta_init, learn_rate, n_iter, A, b, echantillon, l=6):
             estimateur_gradient=estimateur_ML_SS_gradientlogvraisemblance(x=echantillon[i], theta=theta, A=A, b=b, r=0.6, l=l)
             if True in np.isnan(estimateur_gradient):
                 estimateur_gradient=0
-            theta=theta-learn_rate*estimateur_gradient
+            theta=theta-learn_rate*(-1)*estimateur_gradient
             i+=1
             compteur+=1
         else:
             estimateur_gradient=estimateur_ML_SS_gradientlogvraisemblance(x=echantillon[i], theta=theta, A=A, b=b, r=0.6, l=l)
             if True in np.isnan(estimateur_gradient):
                 estimateur_gradient=0
-            theta=theta-learn_rate*estimateur_gradient
+            theta=theta-learn_rate*(-1)*estimateur_gradient
             i+=1
             compteur+=1
 
