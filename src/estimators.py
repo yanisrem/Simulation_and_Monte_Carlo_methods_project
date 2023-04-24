@@ -372,7 +372,7 @@ def estimateur_ML_RR_gradientlogvraisemblance(x, theta, A, b, r, k_max=None,l=0)
     """Estimateur ML-RR du gradient de la log-vraisemblance
 
     Args:
-        x (np.array): point où e gradient de la log-vraisemblance est estimé
+        x (np.array): point où le gradient de la log-vraisemblance est estimé
         theta (np.array): paramètre d'intérêt
         A (np.array): matrice de dimensions 20*20
         b (np.array): vecteur dans R^20
