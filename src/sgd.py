@@ -11,7 +11,7 @@ def SGD(theta_init, learn_rate, echantillon, n_iter):
         theta_init (np.array): paramètre theta initial
         learn_rate (float): learning rate
         echantillon (np.array): n-échantillon utilisé pour estimer theta
-        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, on l'échantillon est re-mélangé
+        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, l'échantillon est re-mélangé
         puis, on recommence à la première itération
 
     Returns:
@@ -52,7 +52,7 @@ def SGD_IAWE(theta_init, learn_rate, n_iter, A, b, echantillon, k=6):
     Args:
         theta_init (np.array): paramètre theta initial
         learn_rate (float): learning rate
-        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, on l'échantillon est re-mélangé
+        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, l'échantillon est re-mélangé
         puis, on recommence à la première itération
         A (np.array): matrice de dimensions 20*20
         b (np.array): vecteur dans R^20
@@ -162,7 +162,7 @@ def SGD_RR(theta_init, learn_rate, n_iter, A, b, echantillon, l=6):
     Args:
         theta_init (np.array): paramètre theta initial
         learn_rate (float): learning rate
-        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, on l'échantillon est re-mélangé
+        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, l'échantillon est re-mélangé
         puis, on recommence à la première itération
         A (np.array): matrice de dimensions 20*20
         b (np.array): vecteur dans R^20
@@ -216,7 +216,7 @@ def SGD_SS(theta_init, learn_rate, n_iter, A, b, echantillon, l=6):
     Args:
         theta_init (np.array): paramètre theta initial
         learn_rate (float): learning rate
-        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, on l'échantillon est re-mélangé
+        n_iter (int): nombre d'itérations. Si le nombre d'itérations est supérieur à la taille d'échantillon alors, l'échantillon est re-mélangé
         puis, on recommence à la première itération
         A (np.array): matrice de dimensions 20*20
         b (np.array): vecteur dans R^20
