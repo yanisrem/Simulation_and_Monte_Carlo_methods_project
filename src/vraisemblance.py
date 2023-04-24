@@ -14,7 +14,7 @@ def log_vraisemblance(x, theta):
     return np.log(densite_X(x, theta))
 
 def gradient_log_vraisemblance(x, theta):
-    """Gradient log(p(x)) par rapport à theta
+    """Gradient de log(p(x)) par rapport à theta
 
     Args:
         x (np.array): point dans R^20
