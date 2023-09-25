@@ -1,6 +1,6 @@
 # **Simulation and Monte Carlo methods project: Unbiaised gradient**
 
-Second year project at ENSAE, in the framework of the "Simulation and Monte Carlo methods". Grade! 18 out 20.
+Second year project at ENSAE, in the framework of the "Simulation and Monte Carlo methods" course. Grade: 18 out 20.
 
 ## **Key Idea**
 
